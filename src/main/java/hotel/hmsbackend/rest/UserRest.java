@@ -23,5 +23,6 @@ public interface UserRest {
         ResponseEntity<String> changePassword(@RequestBody Map<String,String> requestMap);
         @PostMapping("/forgetpassword")
         ResponseEntity<String> forgetPassword(@RequestBody Map<String, String> requestMap);
+
 }
 

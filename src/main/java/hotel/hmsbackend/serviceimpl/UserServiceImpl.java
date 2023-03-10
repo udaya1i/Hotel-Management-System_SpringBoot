@@ -179,4 +179,5 @@ public class UserServiceImpl implements UserService {
         }
         return HMSUtilits.getResponseEntity(HMSConstant.something_went_wrong, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
 }
