@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.web.authentication.ExceptionMappingAuthenticationFailureHandler;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -125,6 +126,26 @@ public class ProductServiceImpl implements ProductService {
             }
 
         } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return HMSUtilits.getResponseEntity(HMSConstant.something_went_wrong, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Override
+    public ResponseEntity<?> updateStatus(Map<String, String> requestMap) {
+        try{
+            if (jwtFilter.isAdmin()){
+                   Optional optional = productDao.findById(Integer.parseInt(requestMap.get("id")));
+                   if (!optional.isEmpty()){
+                            productDao.updateProductStatus(requestMap.get("status"), Integer.parseInt(requestMap.get("id")));
+                            return HMSUtilits.getResponseEntity("Product status updated successfully👌", HttpStatus.OK);
+                   }else {
+                       return HMSUtilits.getResponseEntity("Product Not Available🤧", HttpStatus.OK);
+                   }
+            }else {
+                return HMSUtilits.getResponseEntity(HMSConstant.unauthorize_access, HttpStatus.UNAUTHORIZED);
+            }
+        }catch (Exception ex){
             ex.printStackTrace();
         }
         return HMSUtilits.getResponseEntity(HMSConstant.something_went_wrong, HttpStatus.INTERNAL_SERVER_ERROR);

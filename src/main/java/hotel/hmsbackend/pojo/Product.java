@@ -7,6 +7,7 @@ import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import java.io.Serializable;
 @NamedQuery(name = "Product.getAllProduct", query = "select new hotel.hmsbackend.wrapper.ProductWrapper(p.id, p.name,p.description, p.price,p.status, p.category.id,p.category.name ) from Product p  ")
+@NamedQuery(name = "Product.updateProductStatus", query = "update Product p set p.status=:status where p.id=:id")  // this p.status =:status is same as in productdao ({@Param("status")String status}) -----
 @Entity
 @DynamicInsert
 @DynamicUpdate
