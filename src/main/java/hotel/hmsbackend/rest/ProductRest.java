@@ -4,11 +4,9 @@ import hotel.hmsbackend.pojo.Product;
 import hotel.hmsbackend.wrapper.ProductWrapper;
 import org.hibernate.hql.internal.ast.tree.ResolvableNode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.awt.geom.RectangularShape;
 import java.util.List;
 import java.util.Map;
@@ -23,4 +21,12 @@ public interface ProductRest {
 
     @PostMapping("/update")
     ResponseEntity<String> updateProduct(@RequestBody Map<String, String> requestMap);
+
+    @DeleteMapping(path = "/product/{id}")
+    ResponseEntity<?> deleteProduct(@PathParam("id") Integer id);
+
+
+
+
+
 }

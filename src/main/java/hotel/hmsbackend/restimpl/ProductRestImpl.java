@@ -47,4 +47,14 @@ public class ProductRestImpl implements ProductRest {
         }
         return HMSUtilits.getResponseEntity(HMSConstant.something_went_wrong, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @Override
+    public ResponseEntity<?> deleteProduct(Integer id) {
+        try {
+            return productService.deleteProduct(id);
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return HMSUtilits.getResponseEntity(HMSConstant.something_went_wrong, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

@@ -11,6 +11,7 @@ import hotel.hmsbackend.wrapper.ProductWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.web.authentication.ExceptionMappingAuthenticationFailureHandler;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -106,6 +107,26 @@ public class ProductServiceImpl implements ProductService {
             ex.printStackTrace();
         }
         return HMSUtilits.getResponseEntity(HMSConstant.something_went_wrong, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
+    @Override
+    public ResponseEntity<?> deleteProduct(Integer id) {
+        try {
+            if (jwtFilter.isAdmin()){
+               Optional optional = productDao.findById(id);
+               if (!optional.isEmpty()){
+                    productDao.deleteById(id);
+                    return HMSUtilits.getResponseEntity("Product Deleted🫠", HttpStatus.OK);
+
+               }
+               return HMSUtilits.getResponseEntity("This Product is not available", HttpStatus.OK);
+            }else {
+                return HMSUtilits.getResponseEntity(HMSConstant.unauthorize_access, HttpStatus.UNAUTHORIZED);
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return HMSUtilits.getResponseEntity(HMSConstant.something_went_wrong, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
