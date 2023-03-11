@@ -150,4 +150,15 @@ public class ProductServiceImpl implements ProductService {
         }
         return HMSUtilits.getResponseEntity(HMSConstant.something_went_wrong, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @Override
+    public ResponseEntity<List<ProductWrapper>> getByCateogry(Integer id) {
+        try{
+                return new ResponseEntity<>(productDao.getProductByCategory(id), HttpStatus.OK);
+
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
