@@ -87,7 +87,7 @@ public class UserServiceImpl implements UserService {
                             customerUserDetailsSerivce.getUserDetail().getRole())+"\"}", HttpStatus.OK);
                 }
                 else {
-                    System.out.println(("inside else condition")); //testing
+//                    System.out.println(("inside else condition")); //testing
                     return new ResponseEntity<String>("{\"message\":\""+ "wait until user accept you request"+"\"}", HttpStatus.BAD_REQUEST);
                 }
             }
