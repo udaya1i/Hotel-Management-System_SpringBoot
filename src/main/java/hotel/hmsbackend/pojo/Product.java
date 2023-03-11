@@ -9,6 +9,7 @@ import java.io.Serializable;
 @NamedQuery(name = "Product.getAllProduct", query = "select new hotel.hmsbackend.wrapper.ProductWrapper(p.id, p.name,p.description, p.price,p.status, p.category.id,p.category.name ) from Product p  ")
 @NamedQuery(name = "Product.updateProductStatus", query = "update Product p set p.status=:status where p.id=:id")  // this p.status =:status is same as in productdao ({@Param("status")String status}) -----
 @NamedQuery(name = "Product.getProductByCategory", query ="select new hotel.hmsbackend.wrapper.ProductWrapper(p.id, p.name) from Product p where p.category.id=:id and p.status='true' ")
+@NamedQuery(name="product.getProductById", query = "select new hotel.hmsbackend.wrapper.ProductWrapper(p.id, p.name,p.description, p.price) from Product p where p.id=:id")
 @Entity
 @DynamicInsert
 @DynamicUpdate
