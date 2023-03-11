@@ -6,6 +6,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import java.io.Serializable;
+@NamedQuery(name = "Product.getAllProduct", query = "select new hotel.hmsbackend.wrapper.ProductWrapper(p.id, p.name,p.description, p.price,p.status, p.category.id,p.category.name ) from Product p  ")
 @Entity
 @DynamicInsert
 @DynamicUpdate

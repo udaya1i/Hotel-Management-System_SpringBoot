@@ -1,5 +1,4 @@
 package hotel.hmsbackend.serviceimpl;
-
 import hotel.hmsbackend.constent.HMSConstant;
 import hotel.hmsbackend.dao.ProductDao;
 import hotel.hmsbackend.jwt.JwtFilter;
@@ -7,20 +6,21 @@ import hotel.hmsbackend.pojo.Category;
 import hotel.hmsbackend.pojo.Product;
 import hotel.hmsbackend.service.ProductService;
 import hotel.hmsbackend.utils.HMSUtilits;
+import hotel.hmsbackend.wrapper.ProductWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
-
 @Service
 public class ProductServiceImpl implements ProductService {
     @Autowired
     ProductDao productDao;
     @Autowired
     JwtFilter jwtFilter;
-
     @Override
     public ResponseEntity<String> addNewProduct(Map<String, String> requestMap) {
         try {
@@ -34,8 +34,6 @@ public class ProductServiceImpl implements ProductService {
             } else {
                 return HMSUtilits.getResponseEntity(HMSConstant.unauthorize_access, HttpStatus.UNAUTHORIZED);
             }
-
-
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -63,8 +61,17 @@ public class ProductServiceImpl implements ProductService {
             product.setCategory(category);
         product.setName(requestMap.get("name"));
         product.setDescription(requestMap.get("description"));
-        product.setPrice(Integer.parseInt(requestMap.get("price")));
+        product.setPrice(Integer.parseInt(requestMap.get("price"))) ;
     return product;
     }
 
+    @Override
+    public ResponseEntity<List<ProductWrapper>> getAllProduct() {
+        try {
+                return  new ResponseEntity<>(productDao.getAllProduct(), HttpStatus.OK);
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
