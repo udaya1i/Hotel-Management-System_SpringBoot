@@ -1,4 +1,5 @@
 package hotel.hmsbackend.serviceimpl;
+
 import hotel.hmsbackend.constent.HMSConstant;
 import hotel.hmsbackend.dao.ProductDao;
 import hotel.hmsbackend.jwt.JwtFilter;
@@ -15,12 +16,15 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+
 @Service
 public class ProductServiceImpl implements ProductService {
     @Autowired
     ProductDao productDao;
     @Autowired
     JwtFilter jwtFilter;
+
     @Override
     public ResponseEntity<String> addNewProduct(Map<String, String> requestMap) {
         try {
@@ -39,6 +43,7 @@ public class ProductServiceImpl implements ProductService {
         }
         return HMSUtilits.getResponseEntity(HMSConstant.something_went_wrong, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
     private boolean validateProductMap(Map<String, String> requestMap, boolean validateId) {
         if (requestMap.containsKey("name")) {
             if (requestMap.containsKey("id") && validateId) {
@@ -49,29 +54,58 @@ public class ProductServiceImpl implements ProductService {
         }
         return false;
     }
+
     private Product getProductFromMap(Map<String, String> requestMap, boolean isAdd) {
         Category category = new Category();
         category.setId(Integer.parseInt(requestMap.get("categoryId")));
         Product product = new Product();
         if (isAdd) {
             product.setId(Integer.parseInt(requestMap.get("id")));
-        }else {
+        } else {
             product.setStatus("true");
         }
-            product.setCategory(category);
+        product.setCategory(category);
         product.setName(requestMap.get("name"));
         product.setDescription(requestMap.get("description"));
-        product.setPrice(Integer.parseInt(requestMap.get("price"))) ;
-    return product;
+        product.setPrice(Integer.parseInt(requestMap.get("price")));
+        return product;
     }
 
     @Override
     public ResponseEntity<List<ProductWrapper>> getAllProduct() {
         try {
-                return  new ResponseEntity<>(productDao.getAllProduct(), HttpStatus.OK);
-        }catch (Exception ex){
+            return new ResponseEntity<>(productDao.getAllProduct(), HttpStatus.OK);
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Override
+    public ResponseEntity<String> updateProduct(Map<String, String> requestMap) {
+        try {
+            if (jwtFilter.isAdmin()) {
+                if (validateProductMap(requestMap, true)) {
+                    Optional<Product> optional = productDao.findById(Integer.parseInt(requestMap.get("id")));
+                    if (!optional.isEmpty()) {
+                        Product product = getProductFromMap(requestMap, true);
+                        product.setStatus(optional.get().getStatus());
+                        productDao.save(product);
+                        return HMSUtilits.getResponseEntity("Updated Successfulley😊", HttpStatus.OK);
+                    } else {
+                        return HMSUtilits.getResponseEntity("This Product is not available", HttpStatus.OK);
+                    }
+                } else {
+                    return HMSUtilits.getResponseEntity(HMSConstant.invalid_data, HttpStatus.BAD_REQUEST);
+                }
+            } else {
+                HMSUtilits.getResponseEntity(HMSConstant.unauthorize_access, HttpStatus.UNAUTHORIZED);
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return HMSUtilits.getResponseEntity(HMSConstant.something_went_wrong, HttpStatus.INTERNAL_SERVER_ERROR);
+
     }
 }
