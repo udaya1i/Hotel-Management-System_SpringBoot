@@ -23,6 +23,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -86,7 +88,7 @@ public class BillServiceImpl implements BillService {
     }
 
     private void addRows(PdfPTable table, Map<String, Object> mapFromJson) {
-        log.info("addrows....");
+        log.info("addrows................");
         table.addCell((String) mapFromJson.get("name"));
         table.addCell((String) mapFromJson.get("category"));
         table.addCell((String) mapFromJson.get("qty"));
@@ -164,5 +166,14 @@ public class BillServiceImpl implements BillService {
             ex.printStackTrace();
         }
     }
-
+    @Override
+    public ResponseEntity<List<Bill>> getAllBills() {
+     List<Bill> list = new ArrayList<>();
+     if (jwtFilter.isAdmin()){
+        list = billDao.getAllBills();
+     }else {
+            list = billDao.getBillByUserName(jwtFilter.getCurrentUser());
+     }
+     return  new ResponseEntity<>(list, HttpStatus.OK);
+    }
 }

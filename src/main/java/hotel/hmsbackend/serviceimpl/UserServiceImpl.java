@@ -71,6 +71,8 @@ public class UserServiceImpl implements UserService {
         user.setRole("user");
         return user;
     }
+
+    //generate token
     @Override
     public ResponseEntity<String> login(Map<String, String> requestMap) {
         log.info("Inside Login");
@@ -131,6 +133,8 @@ public class UserServiceImpl implements UserService {
         }
         return HMSUtilits.getResponseEntity(HMSConstant.something_went_wrong, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    //email
     private void sentMailToAllAdmin(String status, String user, List<String> allAdmin) {
         allAdmin.remove(jwtFilter.getCurrentUser());
         if (status != null && status.equalsIgnoreCase("true")) {
