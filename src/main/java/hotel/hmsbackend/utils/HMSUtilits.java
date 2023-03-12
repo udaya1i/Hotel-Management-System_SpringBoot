@@ -1,4 +1,7 @@
 package hotel.hmsbackend.utils;
+import com.fasterxml.jackson.core.io.JsonEOFException;
+import com.google.gson.JsonArray;
+import org.json.JSONException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -14,5 +17,11 @@ public class HMSUtilits {
         Date date = new Date();
         long time = date.getTime();
         return "Bill -"+time;
+    }
+
+    public static JsonArray getJsonArrayFromString(String data) throws JSONException {
+        JsonArray jsonArray = new JsonArray(data);
+
+
     }
 }
