@@ -34,6 +34,10 @@ public class UserServiceImpl implements UserService {
     @Autowired
     EmailUtils emailUtils;
 
+
+
+    //sign up section
+
     @Override
     public ResponseEntity<String> signUp(Map<String, String> requestMap) {
         log.info("Inside Signup{}", requestMap);
@@ -54,6 +58,8 @@ public class UserServiceImpl implements UserService {
         }
         return HMSUtilits.getResponseEntity(HMSConstant.something_went_wrong, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    // validate sing up
     private boolean validateSignUpMap(Map<String, String> requestMap) {
         if (requestMap.containsKey("name") && requestMap.containsKey("contactNumber")
                 && requestMap.containsKey("email") && requestMap.containsKey("password")) {
@@ -71,8 +77,7 @@ public class UserServiceImpl implements UserService {
         user.setRole("user");
         return user;
     }
-
-    //generate token
+    //generating JWT token
     @Override
     public ResponseEntity<String> login(Map<String, String> requestMap) {
         log.info("Inside Login");
@@ -80,7 +85,7 @@ public class UserServiceImpl implements UserService {
             Authentication auth = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(requestMap.get("email"), requestMap.get("password"))
             );
-//            System.out.println("...................."); //testing  debugging
+//            System.out.println("...................."); //  debugging
             if (auth.isAuthenticated()) {
 //                System.out.println("inside if condition"); //testing
                 if (customerUserDetailsSerivce.getUserDetail().getStatus().equalsIgnoreCase("true")) {
@@ -100,6 +105,8 @@ public class UserServiceImpl implements UserService {
 //        System.out.println("out.............");// testing
         return new ResponseEntity<String>("{\"message\":\"" + "Something Went Wrong" + "\"}", HttpStatus.BAD_REQUEST);
     }
+
+    // getting all user
     @Override
     public ResponseEntity<List<HMSWrapper>> getAllUser() {
         try {
@@ -113,6 +120,8 @@ public class UserServiceImpl implements UserService {
         }
         return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    // update user
     @Override
     public ResponseEntity<String> update(Map<String, String> requestMap) {
         try {
@@ -134,7 +143,7 @@ public class UserServiceImpl implements UserService {
         return HMSUtilits.getResponseEntity(HMSConstant.something_went_wrong, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    //email
+    // send email to all admin
     private void sentMailToAllAdmin(String status, String user, List<String> allAdmin) {
         allAdmin.remove(jwtFilter.getCurrentUser());
         if (status != null && status.equalsIgnoreCase("true")) {
@@ -143,10 +152,14 @@ public class UserServiceImpl implements UserService {
             emailUtils.sendSimpleMessage(jwtFilter.getCurrentUser(), "Account Disabled", "USER:-" + user + "\n  is disabled by \n Admi:- \n" + jwtFilter.getCurrentUser(), allAdmin);
         }
     }
+
+    // check token
     @Override
     public ResponseEntity<String> checkToken() {
         return HMSUtilits.getResponseEntity("true", HttpStatus.OK);
     }
+
+    // change password
     @Override
     public ResponseEntity<String> changepassword(Map<String, String> requestMap) {
         try {
@@ -166,6 +179,8 @@ public class UserServiceImpl implements UserService {
         }
         return HMSUtilits.getResponseEntity(HMSConstant.something_went_wrong, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    // forget user password
     @Override
     public ResponseEntity<String> forgetPassword(Map<String, String> requestMap) {
         try {

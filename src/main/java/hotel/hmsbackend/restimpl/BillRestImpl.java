@@ -47,4 +47,15 @@ public class BillRestImpl implements BillRest {
         }
         return null;
     }
+
+    @Override
+    public ResponseEntity<String> deletebill(Integer id) {
+        try{
+            return billService.deletebill(id);
+
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return HMSUtilits.getResponseEntity(HMSConstant.something_went_wrong, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import javax.swing.text.html.Option;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -23,6 +25,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Stream;
 @Service
 @Slf4j
@@ -205,5 +208,20 @@ public class BillServiceImpl implements BillService {
         byte[] byteArray = IOUtils.toByteArray(targetStream);
         targetStream.close();
         return byteArray;
+    }
+    @Override
+    public ResponseEntity<String> deletebill(Integer id) {
+        try {
+            Optional optional = billDao.findById(id);
+            if (!optional.isEmpty()){
+                    billDao.deleteById(id);
+                    return HMSUtilits.getResponseEntity("Bill Deleted", HttpStatus.OK);
+            }else {
+                return HMSUtilits.getResponseEntity("This Bill Doesn't Exist", HttpStatus.OK);
+            }
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return HMSUtilits.getResponseEntity(HMSConstant.something_went_wrong, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

@@ -32,6 +32,8 @@ public class JWTUtils {
         claims.put("role", role);
        return createToken(claims, username);
     }
+
+    // creating jwt token
     private String createToken(Map<String, Object> claims, String subject){
         return  Jwts.builder()
                 .setClaims(claims)

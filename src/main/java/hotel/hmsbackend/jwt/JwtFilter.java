@@ -20,6 +20,8 @@ public class JwtFilter extends OncePerRequestFilter {
     CustomerUserDetailsSerivce serivce;
     Claims claims =null;
     private String username = null;
+
+    // filter
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain)
             throws ServletException, IOException {

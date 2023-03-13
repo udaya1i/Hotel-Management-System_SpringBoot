@@ -15,6 +15,8 @@ public class CustomerUserDetailsSerivce implements UserDetailsService {
     @Autowired
     UserDao userDao;
     private hotel.hmsbackend.pojo.User userDetail;
+
+    // load user by username
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("Inside loadUserByUsername {}",username);
@@ -25,6 +27,7 @@ public class CustomerUserDetailsSerivce implements UserDetailsService {
             throw new UsernameNotFoundException("User Not Found.");
         }
     }
+
     public hotel.hmsbackend.pojo.User getUserDetail() {
         hotel.hmsbackend.pojo.User user = userDetail;
         user.setPassword(null);
