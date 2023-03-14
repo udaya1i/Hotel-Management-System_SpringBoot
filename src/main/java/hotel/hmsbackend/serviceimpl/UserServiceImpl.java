@@ -1,4 +1,5 @@
 package hotel.hmsbackend.serviceimpl;
+
 import hotel.hmsbackend.constent.HMSConstant;
 import hotel.hmsbackend.dao.UserDao;
 import hotel.hmsbackend.jwt.CustomerUserDetailsSerivce;
@@ -17,7 +18,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+
 import java.util.*;
+
 @Slf4j
 @Service
 public class UserServiceImpl implements UserService {
@@ -33,11 +36,7 @@ public class UserServiceImpl implements UserService {
     JwtFilter jwtFilter;
     @Autowired
     EmailUtils emailUtils;
-
-
-
     //sign up section
-
     @Override
     public ResponseEntity<String> signUp(Map<String, String> requestMap) {
         log.info("Inside Signup{}", requestMap);
@@ -58,7 +57,6 @@ public class UserServiceImpl implements UserService {
         }
         return HMSUtilits.getResponseEntity(HMSConstant.something_went_wrong, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
     // validate sing up
     private boolean validateSignUpMap(Map<String, String> requestMap) {
         if (requestMap.containsKey("name") && requestMap.containsKey("contactNumber")
@@ -87,7 +85,6 @@ public class UserServiceImpl implements UserService {
             );
 //            System.out.println("...................."); //  debugging
             if (auth.isAuthenticated()) {
-//                System.out.println("inside if condition"); //testing
                 if (customerUserDetailsSerivce.getUserDetail().getStatus().equalsIgnoreCase("true")) {
                     return new ResponseEntity<String>("{\"token\":\"" + jwtUtils.generateToken(customerUserDetailsSerivce.getUserDetail().getEmail(),
                             customerUserDetailsSerivce.getUserDetail().getRole()) + "\"}", HttpStatus.OK);
@@ -105,7 +102,6 @@ public class UserServiceImpl implements UserService {
 //        System.out.println("out.............");// testing
         return new ResponseEntity<String>("{\"message\":\"" + "Something Went Wrong" + "\"}", HttpStatus.BAD_REQUEST);
     }
-
     // getting all user
     @Override
     public ResponseEntity<List<HMSWrapper>> getAllUser() {
@@ -120,7 +116,6 @@ public class UserServiceImpl implements UserService {
         }
         return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
     // update user
     @Override
     public ResponseEntity<String> update(Map<String, String> requestMap) {
@@ -142,7 +137,6 @@ public class UserServiceImpl implements UserService {
         }
         return HMSUtilits.getResponseEntity(HMSConstant.something_went_wrong, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
     // send email to all admin
     private void sentMailToAllAdmin(String status, String user, List<String> allAdmin) {
         allAdmin.remove(jwtFilter.getCurrentUser());
@@ -152,13 +146,11 @@ public class UserServiceImpl implements UserService {
             emailUtils.sendSimpleMessage(jwtFilter.getCurrentUser(), "Account Disabled", "USER:-" + user + "\n  is disabled by \n Admi:- \n" + jwtFilter.getCurrentUser(), allAdmin);
         }
     }
-
     // check token
     @Override
     public ResponseEntity<String> checkToken() {
         return HMSUtilits.getResponseEntity("true", HttpStatus.OK);
     }
-
     // change password
     @Override
     public ResponseEntity<String> changepassword(Map<String, String> requestMap) {
@@ -172,6 +164,8 @@ public class UserServiceImpl implements UserService {
                 }
                 return HMSUtilits.getResponseEntity("Incorrect Old Password", HttpStatus.BAD_REQUEST);
             }
+
+            
             return HMSUtilits.getResponseEntity(HMSConstant.something_went_wrong, HttpStatus.INTERNAL_SERVER_ERROR);
 
         } catch (Exception ex) {

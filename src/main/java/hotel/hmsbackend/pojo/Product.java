@@ -3,6 +3,8 @@ package hotel.hmsbackend.pojo;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import java.io.Serializable;
@@ -11,6 +13,7 @@ import java.io.Serializable;
 @NamedQuery(name = "Product.getProductByCategory", query ="select new hotel.hmsbackend.wrapper.ProductWrapper(p.id, p.name) from Product p where p.category.id=:id and p.status='true' ")
 @NamedQuery(name="product.getProductById", query = "select new hotel.hmsbackend.wrapper.ProductWrapper(p.id, p.name,p.description, p.price) from Product p where p.id=:id")
 @Entity
+@Data
 @DynamicInsert
 @DynamicUpdate
 public class Product implements Serializable {

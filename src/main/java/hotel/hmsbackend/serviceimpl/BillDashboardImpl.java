@@ -15,14 +15,12 @@ import java.util.Map;
 
 @Service
 public class BillDashboardImpl implements BillDashboard {
-
     @Autowired
     CategoryDao categoryDao;
     @Autowired
     ProductDao productDao;
     @Autowired
     BillDao billDao;
-
     @Override
     public ResponseEntity<Map<String, Object>> getDetails() {
         Map<String, Object> map = new HashMap<>();
