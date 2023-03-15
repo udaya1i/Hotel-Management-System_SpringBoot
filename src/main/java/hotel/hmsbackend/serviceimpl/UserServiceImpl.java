@@ -83,8 +83,8 @@ public class UserServiceImpl implements UserService {
             Authentication auth = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(requestMap.get("email"), requestMap.get("password"))
             );
-//            System.out.println("...................."); //  debugging
             if (auth.isAuthenticated()) {
+//                System.out.println("authh=---------------------") ;  // testing.....
                 if (customerUserDetailsSerivce.getUserDetail().getStatus().equalsIgnoreCase("true")) {
                     return new ResponseEntity<String>("{\"token\":\"" + jwtUtils.generateToken(customerUserDetailsSerivce.getUserDetail().getEmail(),
                             customerUserDetailsSerivce.getUserDetail().getRole()) + "\"}", HttpStatus.OK);
@@ -93,13 +93,10 @@ public class UserServiceImpl implements UserService {
                     return new ResponseEntity<String>("{\"message\":\"" + "wait until user accept you request" + "\"}", HttpStatus.BAD_REQUEST);
                 }
             }
-//            System.out.println("out of inside"); //testing
         } catch (Exception ex) {
-//            System.out.println("inside catch exception");// testing
 
             log.error("{}", ex);
         }
-//        System.out.println("out.............");// testing
         return new ResponseEntity<String>("{\"message\":\"" + "Something Went Wrong" + "\"}", HttpStatus.BAD_REQUEST);
     }
     // getting all user
@@ -117,6 +114,8 @@ public class UserServiceImpl implements UserService {
         return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
     // update user
+
+    //testing
     @Override
     public ResponseEntity<String> update(Map<String, String> requestMap) {
         try {
@@ -164,7 +163,6 @@ public class UserServiceImpl implements UserService {
                 }
                 return HMSUtilits.getResponseEntity("Incorrect Old Password", HttpStatus.BAD_REQUEST);
             }
-
             
             return HMSUtilits.getResponseEntity(HMSConstant.something_went_wrong, HttpStatus.INTERNAL_SERVER_ERROR);
 
@@ -174,7 +172,7 @@ public class UserServiceImpl implements UserService {
         return HMSUtilits.getResponseEntity(HMSConstant.something_went_wrong, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    // forget user password
+    // password forgot.....
     @Override
     public ResponseEntity<String> forgetPassword(Map<String, String> requestMap) {
         try {
