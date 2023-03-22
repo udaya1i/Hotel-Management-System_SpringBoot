@@ -22,6 +22,8 @@ public class JwtFilter extends OncePerRequestFilter {
     private String username = null;
 
     // filter
+
+    // flter traffic
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain)
             throws ServletException, IOException {
